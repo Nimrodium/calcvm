@@ -1,8 +1,8 @@
-#[derive(PartialEq,Debug)]
+#[derive(PartialEq,Debug,Clone)]
 pub struct Lexeme{
-    inner:String,
-    line:usize,
-    column:usize,
+    pub inner:String,
+    pub line:usize,
+    pub column:usize,
 }
 impl Lexeme{
     pub fn new(inner:&str,line:usize,column:usize) -> Self{
@@ -34,10 +34,6 @@ pub fn lexize(input:&str) -> Vec<Lexeme>{
             }
         };
     }
-    // 
-    // HOW DOES COLUMN WORK ???
-    // 
-    // 
     'main: loop  {
         let character = if advance {
             match stream.next(){
