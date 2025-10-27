@@ -28,7 +28,7 @@ pub fn lexize(input:&str) -> Vec<Lexeme>{
     macro_rules! push_lexeme {
     () => {
             if !(lexeme_buffer.is_empty()) {
-                println!("pushing '{lexeme_buffer}' {line}:{current_column_start} {column}");
+                // println!("pushing '{lexeme_buffer}' {line}:{current_column_start} {column}");
                 lexemes.push(Lexeme::new(&lexeme_buffer, line, current_column_start));
                 lexeme_buffer.clear();
             }
@@ -39,7 +39,6 @@ pub fn lexize(input:&str) -> Vec<Lexeme>{
             match stream.next(){
                 Some(c) => {
                     column+=1;
-                    println!("fuck {c}: {line}:{column} {current_column_start}");
                     c
                 },
                 None => break 'main,
@@ -50,7 +49,7 @@ pub fn lexize(input:&str) -> Vec<Lexeme>{
         };
         match character {
             // single char lexemes
-            '('|')'|'+'|'-'|'/'|'%'|'^'|'=' => {
+            '('|')'|'+'|'-'|'*'|'/'|'%'|'^'|'=' => {
                 push_lexeme!();
                 current_column_start=column;
                 lexeme_buffer.push(character);
@@ -61,7 +60,7 @@ pub fn lexize(input:&str) -> Vec<Lexeme>{
                 push_lexeme!();
                 if character == '\n'{
                     line+=1;
-                    column=1;
+                    column=0;
                 }
             },
             // multi char lexemes
@@ -74,6 +73,7 @@ pub fn lexize(input:&str) -> Vec<Lexeme>{
             // _ => return Err(format!("'{lexeme_buffer}{character}'"))
         }
     }
+    push_lexeme!(); // EOF push
     lexemes
 }
 
